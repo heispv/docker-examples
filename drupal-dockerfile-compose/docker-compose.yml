@@ -1,0 +1,29 @@
+
+services:
+  drupal:
+    build: .
+    ports:
+      - "8080:80"  # Maps port 8080 on the host to port 80 on the Drupal container
+    depends_on:
+      - postgres  # Ensures PostgreSQL is started before Drupal
+    volumes:
+      - drupal_modules:/var/www/html/modules
+      - drupal_profiles:/var/www/html/profiles
+      - drupal_sites:/var/www/html/sites
+      - drupal_themes:/var/www/html/themes
+
+  postgres:
+    image: "postgres:14"
+    environment:
+      POSTGRES_DB: drupal       # Database name
+      POSTGRES_USER: user       # Database user
+      POSTGRES_PASSWORD: pass   # Database password
+    volumes:
+      - drupal_data:/var/lib/postgresql/data  # Persistent storage for PostgreSQL
+
+volumes:
+  drupal_data:    # Defines a volume for PostgreSQL data
+  drupal_modules:   # Volume for Drupal modules
+  drupal_profiles:  # Volume for Drupal profiles
+  drupal_sites:     # Volume for Drupal sites
+  drupal_themes:    # Volume for Drupal themes
